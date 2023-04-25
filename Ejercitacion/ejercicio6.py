@@ -9,7 +9,7 @@ matriz_a = [[1, 2], [3, 4]]
 matriz_b = [[5, 6], [7, 8]]
 
 
-fifo = '/tmp/fifo1.txt'
+fifo_1 = '/tmp/fifo1.txt'
 
 
 def calcular_elemento(i):
@@ -20,7 +20,7 @@ def calcular_elemento(i):
     for j in range(2):
         resultado += matriz_a[fila][j] * matriz_b[j][columna]
             
-    with open('/tmp/fifo1.txt', 'a') as fifo:
+    with open(fifo_1, 'a') as fifo:
         fifo.write(f'{fila},{columna},{resultado}\n')
     os._exit(0)
     
@@ -33,21 +33,21 @@ def crear_procesos():
 
 def proceso_padre():
     matriz_r = [[None,None],[None,None]]
-    with open('/tmp/fifo1.txt', 'r') as fifo:
+    with open(fifo_1, 'r') as fifo:
         for linea in fifo:
             fila, columna, resultados = linea.split(',')
             matriz_r[int(fila)][int(columna)] = int(resultados.strip())
     print(matriz_r)
 
-    os.unlink('/tmp/fifo1.txt')
+    os.unlink(fifo_1)
 
 
 # inicio del codigo
 
 if __name__ == '__main__':
 
-    if not os.path.exists(fifo):
-        os.mkfifo(fifo)
+    if not os.path.exists(fifo_1):
+        os.mkfifo(fifo_1)
          
     crear_procesos()
 
